@@ -4,19 +4,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <dirent.h>
+#include <string.h>
 
+int calculaTempo(int ** matriz, int n) {
 
-int calculaTempo(int matriz[][2], int n) {
   bool direcao = matriz[0][1];
   bool fila = false;
   int tempo = matriz[0][0] + 10;
-
   for(int i = 1; i < n; i++) {
     //a fila vai ficar falsa quando t + 10 (10 de esperar a fila) ser menor que o tempo de chegada. //40 chegada, tempo atual 15 -> 25 // nesse caso a gente sabe que a fila acabou qnd a gente tá vendo essa linha pq 40 é maior que 15 + 10 (25)
     if(matriz[i][0] > tempo) { //chegada maior que tempo atual
-      if (fila) { 
+      if (fila) {
         if (tempo + 10 > matriz[i][0])
         {
+          if (direcao != matriz[i][1]) { 
+            tempo = matriz[i][0];
+            fila = false;
+          }
           direcao = !direcao;
           tempo += 10; //40 chegada, tempo atual 15 -> 25
         }
@@ -28,6 +33,7 @@ int calculaTempo(int matriz[][2], int n) {
         }
       }
       else { //nao tem fila
+        direcao = matriz[i][1];
         tempo = matriz[i][0] + 10;
       }
     }
@@ -39,8 +45,6 @@ int calculaTempo(int matriz[][2], int n) {
         fila = true;
       }
     }
-      
-
   }
 
   if (fila) { tempo += 10; }
@@ -51,30 +55,86 @@ int calculaTempo(int matriz[][2], int n) {
 
 
 int main(void) {
+  DIR * diretorio;
+  DIR * diretorio2;
+  struct dirent * ponteiroDir;
+  char * nome;
+  off_t tamanho;
+  diretorio = opendir("input");
+  diretorio2 = opendir("output");
+  if (diretorio == NULL) {
+    printf("Erro ao abrir o diretorio dos inputs\n");
+    return 1;
+  }
+  if (diretorio2 == NULL) {
+    printf("Erro ao abrir o diretorio dos outputs\n");
+    return 1;
+  }
+
+  int ** matriz;
   int num_pessoas;
-  printf("Digite o número de pessoas:\n");
-  scanf("%d", &num_pessoas);
-  if (num_pessoas < 1 || num_pessoas > 10000) {
-    printf("Quantidade de pessoas fora dos parametros (1 <= n <= 10000)");
-    return 0;
-  }
-
-  printf("Digite o tempo de chegada e a direção:\n");
-  int matriz[num_pessoas][2];
-  for(int i = 0; i < num_pessoas; i++){
-    scanf("%d %d", &matriz[i][0], &matriz[i][1]);
-    if (matriz[i][0] < 1 || matriz[i][0] > 100000) {
-      printf("Tempo de chegada fora dos parametros (1 <= ti <= 100000)");
-      return 0;
+  char caminho[100];
+  while ((ponteiroDir = readdir(diretorio)) != NULL) {
+    nome = ponteiroDir->d_name;
+    sprintf(caminho, "input/%s", nome);
+    FILE * arquivo = fopen(caminho, "r");
+    
+    if (arquivo == NULL) {
+      continue;
     }
-    if (matriz[i][1] < 0 || matriz[i][1] > 1) {
-      printf("Direção fora dos parametros (0 <= di <= 1)");
-      return 0;
+    if (nome[0] == '.') {
+        continue;
     }
-  }
+    printf("Arquivo Atual: %s\n", nome);
+    tamanho = ftell(arquivo);
 
-  int tempo = calculaTempo(matriz, num_pessoas);
-  printf("O momento da última saída foi: %d\n", tempo);
+    fscanf(arquivo,"%d", &num_pessoas);
+
+    //Cria matriz para guardar os tempos de chegada e as direcoes.
+    matriz = (int **)malloc(num_pessoas * sizeof(int *));
+    if(matriz == NULL) {
+        printf("Erro na alocação de memória.\n");
+        return 1; 
+    }
+    for(int i = 0; i < num_pessoas; i++) {
+        matriz[i] = (int *)malloc(2 * sizeof(int));
+        if(matriz[i] == NULL) {
+            printf("Erro na alocação de memória.\n");
+            return 1; 
+        }
+    }
+    //le o arquivo e guarda cada linha na matriz.
+    for(int i = 0; i < num_pessoas; i++){
+      fscanf(arquivo,"%d %d", &matriz[i][0], &matriz[i][1]);
+    }
+    //calcula o tempo total(calculaTempo)
+    int tempo = calculaTempo(matriz, num_pessoas);
+
+    //abre o arquivo do mesmo nome na pasta output e guarda seu conteudo na variavel resposta
+    sprintf(caminho, "output/%s", nome);
+    FILE * resultado = fopen(caminho,"r");
+    int resposta;
+    fscanf(resultado, "%d", &resposta);
+    if (resultado == NULL) {
+      printf("Não foi possível abrir o arquivo output/%s\n", nome);
+      continue;
+    }
+    //printa a resposta encontrada pelo programa e a resposta no arquivo output.
+    printf("Resposta encontrada: %d\nResposta esperada: %d\n",tempo,resposta);
+    if(resposta == tempo){
+      printf("Respostas coincidem.\n");
+    }
+    else { printf("GIGANTOSSAURO NEGRO\n"); }
+    //libera espaco alocado para a proxima iteracao.
+    if(matriz != NULL) {
+        for(int i = 0; i < num_pessoas; i++) {
+            free(matriz[i]);
+        }
+        free(matriz);
+    }
+    printf("\n");
+    fclose(arquivo);
+  }
 
   return 0;
 }
