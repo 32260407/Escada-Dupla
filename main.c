@@ -124,7 +124,7 @@ int main(void) {
     if(resposta == tempo){
       printf("Respostas coincidem.\n");
     }
-    else { printf("GIGANTOSSAURO NEGRO\n"); }
+    else { printf("Erro.\n"); }
     //libera espaco alocado para a proxima iteracao.
     if(matriz != NULL) {
         for(int i = 0; i < num_pessoas; i++) {
