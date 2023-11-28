@@ -13,8 +13,9 @@ Compilar o arquivo : `gcc main.c -o main`
 
 Executar o arquivo criado : `./main`
 
-##Explicação do codigo
-/*
+## Explicação do codigo
+
+
   No código, a função se inicia na main, com a declaração das variáveis para os
 diretórios, uma para o nome dos arquivos a serem lidos, um ponteiro para visitar
 os arquivos do diretório e uma variável para o tamanho do arquivo que será usada
@@ -59,7 +60,7 @@ TEMPO DE CHEGADA MENOR QUE O TEMPO ATUAL
   Caso o tempo de chegada seja MENOR que o tempo e a direcao do passageiro atual ser a mesma da escada, o tempo se torna o tempo de chegada do passageiro + 10
   Caso o tempo de chegada seja MENOR que o tempo  e a direcao do passageiro atual ser diferente da escada, o passageiro entra na fila;
 
-*/
+
 
 ## Prints
 ![image](https://github.com/32260407/Escada-Dupla/assets/142501084/a74582e6-4cd1-4551-82c1-b82da4d5024b)
