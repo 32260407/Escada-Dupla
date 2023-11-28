@@ -53,9 +53,9 @@ que o tempo atual, ou seja, para passageiros que chegam após o tempo em que o
   
   Caso haja fila e o tempo de chegada do passageiro atual seja MENOR que o tempo que os passageiros da fila levam para completar seu trajeto (tempo atual somado a 10), verificamos se a direção do passageiro coincide com a direcao da fila:
   
-        Se coincidir , a direção troca(pois agora a fila irá utilizar a escada), esvaziamos a fila, e o tempo é o tempo de chegada do passageiro atual + 10(o passageiro atual é o ultimo a entrar e irá na mesma direcao que a fila)
+  -Se coincidir , a direção troca(pois agora a fila irá utilizar a escada), esvaziamos a fila, e o tempo é o tempo de chegada do passageiro atual + 10(o passageiro atual é o ultimo a entrar e irá na mesma direcao que a fila)
         
-        Se não coincidir, a direção troca, o tempo é somado a 10(pois os passageiros na fila agora irão para a escada) e o passageiro atual é adicionado na fila.
+  -Se não coincidir, a direção troca, o tempo é somado a 10(pois os passageiros na fila agora irão para a escada) e o passageiro atual é adicionado na fila.
         
   Caso haja fila e o tempo de chegada do passageiro atual seja MAIOR que o tempo que os passageiros da fila levam para completar seu trajeto (tempo atual somado a 10), significa já houve tempo para a fila atravessar (esvaziou), o destino é o do passageiro atual e o tempo agora é o tempo de chegada do passageiro atual + 10;
 
