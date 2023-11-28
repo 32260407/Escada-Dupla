@@ -67,7 +67,7 @@ TEMPO DE CHEGADA MENOR QUE O TEMPO ATUAL
   Caso o tempo de chegada seja MENOR que o tempo  e a direcao do passageiro atual ser diferente da escada, o passageiro entra na fila;
 
 
-Ao final de cada iteração , comparamos o resultado obtido pelo nosso programa com o resultado esperado no arquivo output e os printamos na tela;
+Ao final de cada arquivo , comparamos o resultado obtido pelo nosso programa com o resultado esperado no arquivo output e os printamos na tela;
 
 ## Prints
 ![image](https://github.com/32260407/Escada-Dupla/assets/142501084/a74582e6-4cd1-4551-82c1-b82da4d5024b)
